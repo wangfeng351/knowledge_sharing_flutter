@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
 import 'package:knowledge_sharing/common/constant.dart';
 import 'package:knowledge_sharing/home/test_page.dart';
+import 'package:knowledge_sharing/http/http_util.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    _getData();
     _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
     super.initState();
   }
@@ -104,5 +106,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ],
     );
+  }
+
+  ///请求接口，获取数据
+  Future<void> _getData() async {
+    ///第一个参数是你的接口名
+    HttpUtil.request("http://10.40.204.173:8086/shares/my/contributions",
+        {"userId": 1, "pageSize": 1, "pageIndex": 0}, (code, msg, data) {
+      if (code == 0) {
+        ///请求成功，做你要做的事情
+        print("获取到的数据是>>>>>>" + data.toString());
+      } else {
+        print("请求异常>>>>>" + msg);
+      }
+    }, (error) {
+      print("请求出错" + error.toString());
+    });
   }
 }
