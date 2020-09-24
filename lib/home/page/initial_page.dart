@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:knowledge_sharing/contribution/contribution_page.dart';
-import 'package:knowledge_sharing/home/home_page.dart';
-import 'package:knowledge_sharing/my/my_page.dart';
+import 'package:knowledge_sharing/contribution/page/contribution_page.dart';
+import 'package:knowledge_sharing/home/page/home_page.dart';
+import 'package:knowledge_sharing/my/page/my_page.dart';
 
 class InitialPage extends StatefulWidget {
   @override

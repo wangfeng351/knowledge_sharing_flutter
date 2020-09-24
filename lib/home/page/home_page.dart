@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
 import 'package:knowledge_sharing/common/constant.dart';
-import 'package:knowledge_sharing/home/test_page.dart';
+import 'package:knowledge_sharing/home/model/Share.dart';
+import 'package:knowledge_sharing/home/page/test_page.dart';
+import 'package:knowledge_sharing/http/api.dart';
 import 'package:knowledge_sharing/http/http_util.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +16,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController _tabController;
+
+  ///定义数据集合
+  List<Share> shareLists = List();
 
   @override
   void initState() {
@@ -111,11 +118,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   ///请求接口，获取数据
   Future<void> _getData() async {
     ///第一个参数是你的接口名
-    HttpUtil.request("http://10.40.204.173:8086/shares/my/contributions",
+    HttpUtil.request(Api.getShareInfo,
         {"userId": 1, "pageSize": 1, "pageIndex": 0}, (code, msg, data) {
       if (code == 0) {
+        for (int i = 0; i < data.length; i++) {
+          Share share = Share.fromJson(data[i]);
+          shareLists.add(share);
+        }
+
+        print("分享用户名: " + shareLists[0].author);
+        print("分享标题: " + shareLists[0].title);
+
         ///请求成功，做你要做的事情
         print("获取到的数据是>>>>>>" + data.toString());
+        setState(() {
+          
+        });
       } else {
         print("请求异常>>>>>" + msg);
       }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:knowledge_sharing/home/initial_page.dart';
+import 'package:knowledge_sharing/home/page/initial_page.dart';
 
 void main() => runApp(MyApp());
 
