@@ -1,7 +1,7 @@
 class Share {
   String author;
   String downloadUrl;
-  int isOriginal;
+  bool isOriginal;
   int price;
   String summary;
   String title;

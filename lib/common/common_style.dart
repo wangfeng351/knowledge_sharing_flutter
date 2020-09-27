@@ -25,10 +25,25 @@ class CommonStyle {
     );
   }
 
+  static TextStyle contentLightGrey() {
+    return TextStyle(
+      fontSize: Constant.font_size_14,
+      color: Constant.grey,
+    );
+  }
+
   static TextStyle notice() {
     return TextStyle(
       fontSize: Constant.font_size_14,
       color: Constant.orange,
+    );
+  }
+
+  static TextStyle textTitle() {
+    return TextStyle(
+      fontSize: Constant.font_size_18,
+      color: Constant.lightBlack,
+      fontWeight: FontWeight.bold
     );
   }
 }

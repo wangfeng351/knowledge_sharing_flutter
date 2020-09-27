@@ -1,6 +1,6 @@
 class Api {
-  static String baseUrl = "http://10.40.204.173:8086/";
+  static String baseUrl = "https://fengw.utools.club/";
 
   ///获取分享信息
-  static String getShareInfo = baseUrl + 'shares/my/contributions';
+  static String getShareInfo = baseUrl + 'share/list';
 }
