@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:knowledge_sharing/home/page/initial_page.dart';
 
 void main() => runApp(MyApp());
@@ -11,7 +12,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(width: 750, height: 1334, allowFontScaling: false);
     return MaterialApp(
+      title: "知识分享",
       theme: ThemeData(
         platform: TargetPlatform.iOS
       ),
