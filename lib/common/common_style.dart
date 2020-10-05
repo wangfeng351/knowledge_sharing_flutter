@@ -13,7 +13,6 @@ class CommonStyle {
     return TextStyle(
       fontSize: Constant.font_size_32.sp,
       fontWeight: FontWeight.bold,
-      color: Constant.lightBlack,
     );
   }
 

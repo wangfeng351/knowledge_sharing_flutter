@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:knowledge_sharing/login/model/user.dart';
+import 'package:knowledge_sharing/util/sp_util.dart';
 
 class Constant {
   ///字体常量
@@ -35,4 +37,6 @@ class Constant {
   ///橘色
   static Color orange = Color(0xFFe2894d);
 
+  ///定义全局变量user
+  static User user = new User();
 }

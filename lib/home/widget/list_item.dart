@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
+import 'package:knowledge_sharing/common/constant.dart';
 import 'package:knowledge_sharing/home/model/Share.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore: must_be_immutable
 class ListItem extends StatefulWidget {
   final List<Share> _shareLists;
+  String testText;
 
-  ListItem(this._shareLists);
+  ListItem(this._shareLists, {this.testText});
 
   @override
   _ListItemState createState() => _ListItemState(this._shareLists);
@@ -77,7 +80,11 @@ class _ListItemState extends State<ListItem> {
                     child: Column(
                       children: <Widget>[
                         Text(shareLists[i].price.toString() + "积分"),
-                        Text("下载"),
+                        Text(Constant.user != null
+                            ? Constant.user.wxNickname != shareLists[i].author
+                                ? "兑换"
+                                : "下载"
+                            : "兑换"),
                       ],
                     ),
                   )

@@ -31,6 +31,7 @@ dependencies:
   dio: ^3.0.9
   # 屏幕适配 "^"代表最低版本 可能会导致版本跟指定不一致 从而导致方法报错
   flutter_screenutil: ^2.2.0
+  shared_preferences: ^0.5.8
   
 dev_dependencies:
   flutter_test:

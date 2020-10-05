@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:knowledge_sharing/home/page/initial_page.dart';
+import 'package:knowledge_sharing/login/page/login._page.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,7 +20,7 @@ class _MyAppState extends State<MyApp> {
         platform: TargetPlatform.iOS
       ),
       debugShowCheckedModeBanner: false,
-      home: InitialPage(),
+      home: LoginPage(),
     );
   }
 }

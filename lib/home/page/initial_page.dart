@@ -12,7 +12,7 @@ class InitialPage extends StatefulWidget {
 class _HomePageState extends State<InitialPage> {
   List<Widget> _bodys = [HomePage(), ContributionPage(), MyPage()];
   int currentIndex = 0;
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
