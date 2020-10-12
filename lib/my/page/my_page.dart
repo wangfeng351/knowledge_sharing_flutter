@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
 import 'package:knowledge_sharing/common/constant.dart';
+import 'package:knowledge_sharing/home/model/Share.dart';
+import 'package:knowledge_sharing/http/api.dart';
+import 'package:knowledge_sharing/http/http_util.dart';
 import 'package:knowledge_sharing/my/page/my_contribution.dart';
 import 'package:knowledge_sharing/my/page/my_exchange.dart';
 import 'package:knowledge_sharing/my/page/score_detail.dart';
@@ -13,6 +16,14 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+  List<Share> shares = List();
+
+  @override
+  void initState() {
+    getSharesByUserId();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +69,7 @@ class _MyPageState extends State<MyPage> {
           SizedBox(
             height: 10.w,
           ),
-          Text("积分: " + "200", style: CommonStyle.content()),
+          Text("积分: " + "${Constant.user == null ? "0" : Constant.user.bonus.toString()}", style: CommonStyle.content()),
           SizedBox(
             height: 20.w,
           ),
@@ -95,26 +106,24 @@ class _MyPageState extends State<MyPage> {
   }
 
   Widget _buildListTile(String name, var className) {
-    return
-    InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return className;
-                  },
-                ),
-              );
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return className;
             },
-            child: 
-     Container(
-      padding: EdgeInsets.only(left: 20.w, right: 20.w),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Constant.lightGrey))),
-      child: ListTile(
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 20.w, right: 20.w),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(width: 1, color: Constant.lightGrey))),
+        child: ListTile(
           contentPadding: EdgeInsets.all(0),
           title: Text(
             name,
@@ -133,7 +142,21 @@ class _MyPageState extends State<MyPage> {
                 size: 28.sp,
               ),
             ),
-          ),),),
+          ),
+        ),
+      ),
     );
+  }
+
+  void getSharesByUserId() {
+    HttpUtil.getRequest(Api.getExchangeShareInfo + "/1", null,
+        (code, msg, data) {
+      for (int i = 0; i < data.length; i++) {
+        Share share = Share.fromJson(data[i]);
+        shares.add(share);
+        setState(() {});
+        print("share的信息是>>>>" + shares[0].cover);
+      }
+    }, (error) => null);
   }
 }

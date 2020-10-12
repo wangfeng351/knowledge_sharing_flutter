@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
 import 'package:knowledge_sharing/common/constant.dart';
+import 'package:knowledge_sharing/http/api.dart';
+import 'package:knowledge_sharing/http/http_util.dart';
+import 'package:knowledge_sharing/my/model/bonus_log.dart';
 
 class ScoreDetail extends StatefulWidget {
   @override
@@ -9,6 +12,15 @@ class ScoreDetail extends StatefulWidget {
 }
 
 class _ScoreDetailState extends State<ScoreDetail> {
+  ///定义日志集合
+  List<BonusLog> bonusList = List();
+
+  @override
+  void initState() {
+    getBonusByUserId();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,28 +29,33 @@ class _ScoreDetailState extends State<ScoreDetail> {
         backgroundColor: Constant.mColor,
       ),
       body: ListView.builder(
-        itemCount: 20,
+        itemCount: bonusList.length,
         itemBuilder: (context, index) {
           return Container(
             decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Constant.lightGrey
-                )
-              )
-            ),
+                border: Border(bottom: BorderSide(color: Constant.lightGrey))),
             child: ListTile(
               title: Row(
                 children: <Widget>[
                   Icon(Icons.access_time),
-                  Text("2020-09-15 07:04:22 -" + " 签到")
+                  Text("${bonusList[index].createTime}" + " ${bonusList[index].description}")
                 ],
               ),
               trailing: Text("20"),
             ),
-          );  
+          );
         },
       ),
     );
+  }
+
+  void getBonusByUserId() {
+    HttpUtil.getRequest(Api.bonusDetail + "/1", null, (code, msg, data) {
+      for (int i = 0; i < data.length; i++) {
+        BonusLog bonusLog = BonusLog.fromJson(data[i]);
+        bonusList.add(bonusLog);
+      }
+      setState(() {});
+    }, (error) => null);
   }
 }

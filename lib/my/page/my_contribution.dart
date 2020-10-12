@@ -20,7 +20,7 @@ class _MyContributionState extends State<MyContribution> {
 
   @override
   void initState() {
-    _getData();
+    getContributionByUserId();
     super.initState();
   }
 
@@ -56,5 +56,19 @@ class _MyContributionState extends State<MyContribution> {
     }, (error) {
       print("请求出错" + error.toString());
     });
+  }
+
+  void getContributionByUserId() {
+    HttpUtil.request(Api.myContribution, {
+      "pageSize": pageSize,
+      "pageIndex": pageIndex,
+      "userId": 1
+    }, (code, msg, data) {
+      for (int i = 0; i < data.length; i++) {
+        Share share = Share.fromJson(data[i]);
+        _myContributionLists.add(share);
+      }
+      setState(() {});
+    }, (error) => null);
   }
 }

@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 Text(
                   "账号:",
-                  style: CommonStyle.font32Dark(),
+                  style: CommonStyle.font32White(),
                 ),
                 SizedBox(
                   width: 10,
@@ -57,6 +57,9 @@ class _LoginPageState extends State<LoginPage> {
                   width: 300,
                   child: TextField(
                     controller: _account,
+                    style: TextStyle(
+                      color: Constant.white
+                    ),
                   ),
                 )
               ],
@@ -68,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Text("密码:", style: CommonStyle.font32Dark()),
+                Text("密码:", style: CommonStyle.font32White()),
                 SizedBox(
                   width: 10,
                 ),
@@ -77,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: 300,
                   child: TextField(
                     controller: _password,
+                    style: TextStyle(color: Constant.white),
                   ),
                 )
               ],

@@ -21,7 +21,7 @@ class _MyExchangeStaet extends State<MyExchange> {
 
   @override
   void initState() {
-    _getData();
+    getSharesByUserId();
     super.initState();
   }
 
@@ -39,23 +39,15 @@ class _MyExchangeStaet extends State<MyExchange> {
     );
   }
 
-  ///请求接口，获取数据
-  Future<void> _getData() async {
-    ///第一个参数是你的接口名
-    HttpUtil.request(
-        Api.getShareInfo, {"pageSize": pageSize, "pageIndex": pageIndex},
+  void getSharesByUserId() {
+    HttpUtil.getRequest(Api.getExchangeShareInfo + "/1", null,
         (code, msg, data) {
-      if (code == 0) {
-        for (int i = 0; i < data.length; i++) {
-          Share share = Share.fromJson(data[i]);
-          exchangeList.add(share);
-        }
+      for (int i = 0; i < data.length; i++) {
+        Share share = Share.fromJson(data[i]);
+        exchangeList.add(share); 
         setState(() {});
-      } else {
-        print("请求异常>>>>>" + msg);
+        print("share的信息是>>>>" + exchangeList[0].cover);
       }
-    }, (error) {
-      print("请求出错" + error.toString());
-    });
+    }, (error) => null);
   }
 }
