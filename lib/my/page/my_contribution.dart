@@ -59,10 +59,11 @@ class _MyContributionState extends State<MyContribution> {
   }
 
   void getContributionByUserId() {
+    ///post请求方法
     HttpUtil.request(Api.myContribution, {
       "pageSize": pageSize,
       "pageIndex": pageIndex,
-      "userId": 1
+      "userId": Constant.user.id
     }, (code, msg, data) {
       for (int i = 0; i < data.length; i++) {
         Share share = Share.fromJson(data[i]);

@@ -13,10 +13,13 @@ class HttpUtil {
       Map<String, Object> params,
       successBlock(int code, String msg, dynamic data),
       errorBlock(error)) async {
+    ///url: 请求地址, params： 参数（没有则填null），successBlock：成功回调，errorBlock:错误回调
     Response response;
     Dio dio = Dio();
+    ///如果需要请求头，在options中写入请求头
     Options options = Options();
     try {
+      ///get请求
       response = await dio.get(url, queryParameters: params, options: options);
 
       ///接收返回的数据

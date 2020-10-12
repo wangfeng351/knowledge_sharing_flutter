@@ -53,7 +53,7 @@ class _MyPageState extends State<MyPage> {
             height: 160.w,
             child: CircleAvatar(
               backgroundImage: NetworkImage(
-                  "https://static.veer.com/veer/static/resources/keyword/2020-02-19/533ed30de651499da1c463bca44b6d60.jpg"),
+                  "${Constant.user == null ? "" : Constant.user.avatarUrl}"),
               radius: 20,
             ),
           ),
@@ -63,7 +63,7 @@ class _MyPageState extends State<MyPage> {
 
           ///昵称
           Text(
-            "陶然然",
+            "${Constant.user == null ? "未登录" : Constant.user.wxNickname}",
             style: CommonStyle.content(),
           ),
           SizedBox(
@@ -149,7 +149,8 @@ class _MyPageState extends State<MyPage> {
   }
 
   void getSharesByUserId() {
-    HttpUtil.getRequest(Api.getExchangeShareInfo + "/1", null,
+    print("用户id是: " + Constant.user.id.toString());
+    HttpUtil.getRequest(Api.getExchangeShareInfo + "/" + Constant.user.id.toString(), null,
         (code, msg, data) {
       for (int i = 0; i < data.length; i++) {
         Share share = Share.fromJson(data[i]);

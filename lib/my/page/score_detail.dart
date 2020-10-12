@@ -50,7 +50,7 @@ class _ScoreDetailState extends State<ScoreDetail> {
   }
 
   void getBonusByUserId() {
-    HttpUtil.getRequest(Api.bonusDetail + "/1", null, (code, msg, data) {
+    HttpUtil.getRequest(Api.bonusDetail + "/" + Constant.user.id.toString(), null, (code, msg, data) {
       for (int i = 0; i < data.length; i++) {
         BonusLog bonusLog = BonusLog.fromJson(data[i]);
         bonusList.add(bonusLog);
