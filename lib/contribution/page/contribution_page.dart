@@ -17,6 +17,7 @@ class _ContributionPageState extends State<ContributionPage>
   FocusNode priceNode = FocusNode();
   FocusNode introductionNode = FocusNode();
   FocusNode addressNode = FocusNode();
+  TextEditingController _account = TextEditingController();
 
   @override
   void initState() {
@@ -114,15 +115,15 @@ class _ContributionPageState extends State<ContributionPage>
     return Expanded(
         child: Column(
       children: <Widget>[
-        _buildFormItem("标题", "请输入标题", titleNode),
+        _buildFormItem("标题", "请输入标题", titleNode, _account),
         CommonStyle.divider,
-        _buildFormItem("作者", "请输入作者", authorNode),
+        _buildFormItem("作者", "请输入作者", authorNode, _account),
         CommonStyle.divider,
-        _buildFormItem("价格", "请输入价格", priceNode),
+        _buildFormItem("价格", "请输入价格", priceNode, _account),
         CommonStyle.divider,
-        _buildFormItem("简介", "介绍一下技术干货吧", introductionNode),
+        _buildFormItem("简介", "介绍一下技术干货吧", introductionNode, _account),
         CommonStyle.divider,
-        _buildFormItem("下载地址", "请输入下载地址", addressNode),
+        _buildFormItem("下载地址", "请输入下载地址", addressNode, _account),
         Container(
           width: MediaQuery.of(context).size.width,
           height: 100.w,
@@ -141,7 +142,7 @@ class _ContributionPageState extends State<ContributionPage>
     ));
   }
 
-  Widget _buildFormItem(String name, String hitText, FocusNode currentNode) {
+  Widget _buildFormItem(String name, String hitText, FocusNode currentNode, TextEditingController editingController) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,6 +159,7 @@ class _ContributionPageState extends State<ContributionPage>
             height: 100.w,
             child: TextField(
               focusNode: currentNode,
+              controller: editingController,
               decoration: InputDecoration(
                   hintText: hitText,
                   hintStyle: CommonStyle.font32Grey(),

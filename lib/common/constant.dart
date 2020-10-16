@@ -39,4 +39,10 @@ class Constant {
 
   ///定义全局变量user
   static User user = new User();
+
+  ///token的值
+  static String token = '';
+
+  ///是否签到
+  static bool isSignIn = false;
 }

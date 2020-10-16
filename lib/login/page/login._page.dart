@@ -57,9 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: 300,
                   child: TextField(
                     controller: _account,
-                    style: TextStyle(
-                      color: Constant.white
-                    ),
+                    style: TextStyle(color: Constant.white),
                   ),
                 )
               ],
@@ -109,8 +107,16 @@ class _LoginPageState extends State<LoginPage> {
         Api.login, {"account": _account.text, "password": _password.text},
         (code, msg, data) {
       if (code == 0) {
-        User user = User.fromJson(data);
-        SpUtil.putObject("user", data);
+        print("获取到的用户信息是");
+        print(data['user']);
+        print(data['token']);
+        print("获取到的用户信息是");
+        User user = User.fromJson(data['user']);
+        SpUtil.putObject("user", user);
+        SpUtil.putBool('isLogin', data['signIn']);
+        SpUtil.putObject("token", data['token']['token']);
+        Constant.token = data['token']['token'];
+        Constant.isSignIn = data['isSignIn'];
         Constant.user = user;
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {

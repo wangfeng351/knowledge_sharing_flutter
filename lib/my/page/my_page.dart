@@ -28,7 +28,7 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: Text(  
           '我的',
           style: CommonStyle.title(),
         ),

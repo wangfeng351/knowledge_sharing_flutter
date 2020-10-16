@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:knowledge_sharing/common/constant.dart';
 
 class HttpUtil {
   //默认分页页数
@@ -16,6 +17,7 @@ class HttpUtil {
     ///url: 请求地址, params： 参数（没有则填null），successBlock：成功回调，errorBlock:错误回调
     Response response;
     Dio dio = Dio();
+
     ///如果需要请求头，在options中写入请求头
     Options options = Options();
     try {
@@ -46,6 +48,7 @@ class HttpUtil {
     Response response;
     Dio dio = Dio();
     Options options = Options();
+    options.headers['X-Token'] = Constant.token == '' ? null : Constant.token;
     try {
       response = await dio.post(url, data: params, options: options);
 

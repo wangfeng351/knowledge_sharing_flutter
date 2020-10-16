@@ -1,4 +1,5 @@
 class Share {
+  int id;
   String author;
   String downloadUrl;
   bool isOriginal;
@@ -8,7 +9,9 @@ class Share {
   String cover;
 
   Share(
-      {this.author,
+      {
+      this.id,
+      this.author,
       this.downloadUrl,
       this.isOriginal,
       this.price,
@@ -17,6 +20,7 @@ class Share {
       this.cover});
 
   Share.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     author = json['author'];
     downloadUrl = json['downloadUrl'];
     isOriginal = json['isOriginal'];
@@ -28,6 +32,7 @@ class Share {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['author'] = this.author;
     data['downloadUrl'] = this.downloadUrl;
     data['isOriginal'] = this.isOriginal;

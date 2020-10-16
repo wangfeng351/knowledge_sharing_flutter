@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
 import 'package:knowledge_sharing/common/constant.dart';
 import 'package:knowledge_sharing/home/model/Share.dart';
+import 'package:knowledge_sharing/home/page/download_page.dart';
+import 'package:knowledge_sharing/home/page/share_detail.dart';
 import 'package:knowledge_sharing/home/widget/list_item.dart';
 import 'package:knowledge_sharing/http/api.dart';
 import 'package:knowledge_sharing/http/http_util.dart';
@@ -236,67 +238,87 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<Widget> _buildListWidget() {
     List<Widget> lists = List();
     for (int i = 0; i < shareLists.length; i++) {
-      lists.add(Container(
-        padding: EdgeInsets.fromLTRB(20.w, 20.w, 20.w, 20.w),
-        decoration: BoxDecoration(
-            border:
-                Border(bottom: BorderSide(color: Color(0xFFe3e3e3), width: 1))),
-        height: 160.w,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                width: 120.w,
-                height: 120.w,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(shareLists[i].cover),
-                )),
-            SizedBox(
-              width: 20.w,
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 300.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          shareLists[i].title,
-                          maxLines: 2,
-                          style: CommonStyle.textTitle(),
-                        ),
-                        Expanded(
-                          child: Text(
-                            shareLists[i].summary,
-                            maxLines: 2,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        Text(shareLists[i].price.toString() + "积分"),
-                        Text(Constant.user != null
-                            ? Constant.user.wxNickname != shareLists[i].author
-                                ? "兑换"
-                                : "下载"
-                            : "兑换"),
-                      ],
-                    ),
-                  )
-                ],
+      lists.add(GestureDetector(
+        onTap: () {
+          if(shareLists[i].downloadUrl == null) {
+            Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              // return ShareDetail();
+              return ShareDetail(shareLists[i].id);
+            },
+          ));
+          } else {
+            Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              // return ShareDetail();
+              return DownloadPage(shareLists[i].title, shareLists[i].downloadUrl);
+            },
+          ));
+          }
+          
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(20.w, 20.w, 20.w, 20.w),
+          decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(color: Color(0xFFe3e3e3), width: 1))),
+          height: 160.w,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                  width: 120.w,
+                  height: 120.w,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(shareLists[i].cover),
+                  )),
+              SizedBox(
+                width: 20.w,
               ),
-            ),
-          ],
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 300.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            shareLists[i].title,
+                            maxLines: 2,
+                            style: CommonStyle.textTitle(),
+                          ),
+                          Expanded(
+                            child: Text(
+                              shareLists[i].summary,
+                              maxLines: 2,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 80,
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: <Widget>[
+                          Text(shareLists[i].downloadUrl == null ? shareLists[i].price.toString() + "积分" : ''),
+                          Text( shareLists[i].downloadUrl == null ? "兑换"
+                                  : "下载"
+                             ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ));
     }
