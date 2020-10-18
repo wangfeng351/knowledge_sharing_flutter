@@ -17,14 +17,25 @@ class Api {
 
   ///帖子详情
   static String shareDetail = baseUrl + 'share/detail';
-  
+
   ///兑换接口
   static String exchange = baseUrl + 'share/exchange/shareInfo';
-  
+
+  ///投稿接口
+  static String contribute = baseUrl + 'share/contribute';
+
+  ///获取未审核的数据
+  static String notCheck = baseUrl + 'share/notCheck';
+
+  ///审核
+  static String checkout = baseUrl + 'admin/shares/auditByFegin';
 
   ///登录
   static String login = userCener + 'user/login';
 
   ///查询积分
   static String bonusDetail = userCener + 'user/bonus/my';
+
+  ///签到
+  static String signIn = userCener + '/user/signIn';
 }

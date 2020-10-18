@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
 import 'package:knowledge_sharing/common/constant.dart';
 import 'package:knowledge_sharing/home/model/Share.dart';
 import 'package:knowledge_sharing/home/page/download_page.dart';
 import 'package:knowledge_sharing/home/page/share_detail.dart';
-import 'package:knowledge_sharing/home/widget/list_item.dart';
 import 'package:knowledge_sharing/http/api.dart';
 import 'package:knowledge_sharing/http/http_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +24,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   ///定义TextField焦点控制器
   FocusNode _searchFocus = FocusNode();
+  EasyRefreshController refreshController;
+  int arrLen = 0;
 
   int pageIndex = 0;
   int pageSize = 10;
@@ -33,6 +35,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    refreshController = EasyRefreshController();
     _getData();
 
     ///初始化选项卡控制器，选项卡个数为2，默认显示第一个选项卡内容
@@ -220,14 +223,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               _searchFocus.unfocus();
             },
             child: Container(
-              ///设置指定上部外边距
-              margin: EdgeInsets.only(top: 20.w),
 
-              ///引入自定义组件,传入对应的值
-              child: ListView(
-                children: _buildListWidget(),
-              ),
-            ),
+                ///设置指定上部外边距
+                margin: EdgeInsets.only(top: 20.w),
+
+                ///引入自定义组件,传入对应的值
+                child: EasyRefresh(
+                  header: MaterialHeader(),
+                  footer: MaterialFooter(), 
+                  onRefresh: () async {
+                    pageIndex = 0;
+                    _getData();
+                  },
+                  onLoad: () async {
+                    pageIndex += 1;
+                    _getData();
+                    refreshController.finishLoad(
+                        noMore: shareLists.length % 10 == 0 &&
+                            shareLists.length == arrLen);
+                  },
+                  child: ListView(
+                    children: _buildListWidget(),
+                  ),
+                )),
           ),
         ),
       ],
@@ -240,22 +258,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     for (int i = 0; i < shareLists.length; i++) {
       lists.add(GestureDetector(
         onTap: () {
-          if(shareLists[i].downloadUrl == null) {
+          if (shareLists[i].downloadUrl == null) {
             Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              // return ShareDetail();
-              return ShareDetail(shareLists[i].id);
-            },
-          ));
+              builder: (context) {
+                // return ShareDetail();
+                return ShareDetail(shareLists[i].id);
+              },
+            ));
           } else {
             Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              // return ShareDetail();
-              return DownloadPage(shareLists[i].title, shareLists[i].downloadUrl);
-            },
-          ));
+              builder: (context) {
+                // return ShareDetail();
+                return DownloadPage(
+                    shareLists[i].title, shareLists[i].downloadUrl);
+              },
+            ));
           }
-          
         },
         child: Container(
           padding: EdgeInsets.fromLTRB(20.w, 20.w, 20.w, 20.w),
@@ -307,10 +325,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       alignment: Alignment.center,
                       child: Column(
                         children: <Widget>[
-                          Text(shareLists[i].downloadUrl == null ? shareLists[i].price.toString() + "积分" : ''),
-                          Text( shareLists[i].downloadUrl == null ? "兑换"
-                                  : "下载"
-                             ),
+                          Text(shareLists[i].downloadUrl == null
+                              ? shareLists[i].price.toString() + "积分"
+                              : ''),
+                          Text(shareLists[i].downloadUrl == null ? "兑换" : "下载"),
                         ],
                       ),
                     )
@@ -336,6 +354,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Share share = Share.fromJson(data[i]);
           shareLists.add(share);
         }
+        arrLen = shareLists.length;
         setState(() {});
       } else {
         print("请求异常>>>>>" + msg);

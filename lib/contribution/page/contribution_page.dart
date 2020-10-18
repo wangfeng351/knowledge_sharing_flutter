@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:knowledge_sharing/common/common_style.dart';
 import 'package:knowledge_sharing/common/constant.dart';
+import 'package:knowledge_sharing/http/api.dart';
+import 'package:knowledge_sharing/http/http_util.dart';
+import 'package:toast/toast.dart';
 
 class ContributionPage extends StatefulWidget {
   @override
@@ -16,8 +19,14 @@ class _ContributionPageState extends State<ContributionPage>
   FocusNode authorNode = FocusNode();
   FocusNode priceNode = FocusNode();
   FocusNode introductionNode = FocusNode();
+  FocusNode coverNode = FocusNode();
   FocusNode addressNode = FocusNode();
-  TextEditingController _account = TextEditingController();
+  TextEditingController _titile = TextEditingController();
+  TextEditingController _author = TextEditingController();
+  TextEditingController _price = TextEditingController();
+  TextEditingController _description = TextEditingController();
+  TextEditingController _downloadUrl = TextEditingController();
+  TextEditingController _cover = TextEditingController();
 
   @override
   void initState() {
@@ -76,7 +85,6 @@ class _ContributionPageState extends State<ContributionPage>
                     value: _switchSelected,
                     onChanged: (value) {
                       setState(() {
-                        _hideKeyboard();
                         _switchSelected = true;
                       });
                     },
@@ -93,7 +101,6 @@ class _ContributionPageState extends State<ContributionPage>
                     value: _switchSelected,
                     onChanged: (value) {
                       setState(() {
-                        _hideKeyboard();
                         _switchSelected = false;
                       });
                       print(
@@ -115,15 +122,17 @@ class _ContributionPageState extends State<ContributionPage>
     return Expanded(
         child: Column(
       children: <Widget>[
-        _buildFormItem("标题", "请输入标题", titleNode, _account),
+        _buildFormItem("标题", "请输入标题", titleNode, _titile),
         CommonStyle.divider,
-        _buildFormItem("作者", "请输入作者", authorNode, _account),
+        _buildFormItem("作者", "请输入作者", authorNode, _author),
         CommonStyle.divider,
-        _buildFormItem("价格", "请输入价格", priceNode, _account),
+        _buildFormItem("价格", "请输入价格", priceNode, _price),
         CommonStyle.divider,
-        _buildFormItem("简介", "介绍一下技术干货吧", introductionNode, _account),
+        _buildFormItem("简介", "介绍一下技术干货吧", introductionNode, _description),
         CommonStyle.divider,
-        _buildFormItem("下载地址", "请输入下载地址", addressNode, _account),
+        _buildFormItem("封面", "请输入封面地址", coverNode, _cover),
+        CommonStyle.divider,
+        _buildFormItem("下载地址", "请输入下载地址", addressNode, _downloadUrl),
         Container(
           width: MediaQuery.of(context).size.width,
           height: 100.w,
@@ -142,7 +151,8 @@ class _ContributionPageState extends State<ContributionPage>
     ));
   }
 
-  Widget _buildFormItem(String name, String hitText, FocusNode currentNode, TextEditingController editingController) {
+  Widget _buildFormItem(String name, String hitText, FocusNode currentNode,
+      TextEditingController editingController) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,12 +184,42 @@ class _ContributionPageState extends State<ContributionPage>
 
   ///收起键盘
   void _hideKeyboard() {
-    setState(() {
-      titleNode.unfocus();
-      authorNode.unfocus();
-      priceNode.unfocus();
-      introductionNode.unfocus();
-      addressNode.unfocus();
-    });
+    var isOriginal = 0;
+    if (_switchSelected) {
+      isOriginal = 1;
+    }
+    
+    HttpUtil.request(Api.contribute, {
+      'userId': Constant.user.id,
+      'author': _author.text,
+      'downloadUrl': _downloadUrl.text,
+      'isOriginal': isOriginal,
+      'price': _price.text,
+      'summary': _description.text,
+      'title': _titile.text,
+      'cover': _cover.text
+    }, (code, msg, data) {
+      if (code == 0) {
+        Toast.show("投稿成功", context, duration: 1, gravity: Toast.CENTER);
+
+        setState(() {
+          titleNode.unfocus();
+          authorNode.unfocus();
+          priceNode.unfocus();
+          introductionNode.unfocus();
+          addressNode.unfocus();
+          coverNode.unfocus();
+          _titile.text = '';
+          _author.text = '';
+          _price.text = '';
+          _description.text = '';
+          _cover.text = '';
+          _downloadUrl.text = '';
+          _switchSelected = true;
+        });
+      } else {
+        print("投稿异常");
+      }
+    }, (error) => null);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,9 +7,11 @@ import 'package:knowledge_sharing/common/constant.dart';
 import 'package:knowledge_sharing/home/model/Share.dart';
 import 'package:knowledge_sharing/http/api.dart';
 import 'package:knowledge_sharing/http/http_util.dart';
+import 'package:knowledge_sharing/my/page/check_page.dart';
 import 'package:knowledge_sharing/my/page/my_contribution.dart';
 import 'package:knowledge_sharing/my/page/my_exchange.dart';
 import 'package:knowledge_sharing/my/page/score_detail.dart';
+import 'package:toast/toast.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -28,7 +31,7 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(  
+        title: Text(
           '我的',
           style: CommonStyle.title(),
         ),
@@ -69,20 +72,27 @@ class _MyPageState extends State<MyPage> {
           SizedBox(
             height: 10.w,
           ),
-          Text("积分: " + "${Constant.user == null ? "0" : Constant.user.bonus.toString()}", style: CommonStyle.content()),
+          Text(
+              "积分: " +
+                  "${Constant.user == null ? "0" : Constant.user.bonus.toString()}",
+              style: CommonStyle.content()),
           SizedBox(
             height: 20.w,
           ),
           Container(
-            width: 100.w,
+            width: 120.w,
             height: 50.w,
             child: RaisedButton(
               padding: EdgeInsets.all(0),
-              onPressed: () {},
-              color: Colors.green,
+              onPressed: () {
+                signIn();
+              },
+              color: Constant.isSignIn == true ? Colors.red : Colors.green,
               child: Text(
-                "签到",
-                style: CommonStyle.lightTime(),
+                Constant.isSignIn == true ? "已签到" : "签到",
+                style: Constant.isSignIn == true
+                    ? CommonStyle.font32White()
+                    : CommonStyle.font32Dark(),
               ),
             ),
           ),
@@ -100,6 +110,10 @@ class _MyPageState extends State<MyPage> {
           _buildListTile("我的兑换", MyExchange()),
           _buildListTile("积分明细", ScoreDetail()),
           _buildListTile("我的投稿", MyContribution()),
+          Offstage(
+            offstage: Constant.user.roles == '普通用户',
+            child: _buildListTile("审核帖子", CheckPage()),
+          )
         ],
       ),
     );
@@ -150,13 +164,26 @@ class _MyPageState extends State<MyPage> {
 
   void getSharesByUserId() {
     print("用户id是: " + Constant.user.id.toString());
-    HttpUtil.getRequest(Api.getExchangeShareInfo + "/" + Constant.user.id.toString(), null,
+    HttpUtil.getRequest(
+        Api.getExchangeShareInfo + "/" + Constant.user.id.toString(), null,
         (code, msg, data) {
       for (int i = 0; i < data.length; i++) {
         Share share = Share.fromJson(data[i]);
         shares.add(share);
         setState(() {});
         print("share的信息是>>>>" + shares[0].cover);
+      }
+    }, (error) => null);
+  }
+
+  void signIn() {
+    HttpUtil.request(Api.signIn + '/' + Constant.user.id.toString(), null,
+        (code, msg, data) {
+      if (code == 0) {
+        Toast.show("签到成功", context, duration: 1, gravity: Toast.CENTER);
+        Constant.isSignIn = true;
+        Constant.user.bonus += 50;
+        setState(() {});
       }
     }, (error) => null);
   }
