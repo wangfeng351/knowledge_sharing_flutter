@@ -38,10 +38,11 @@ class _ScoreDetailState extends State<ScoreDetail> {
               title: Row(
                 children: <Widget>[
                   Icon(Icons.access_time),
-                  Text("${bonusList[index].createTime}" + " ${bonusList[index].description}")
+                  Text("${bonusList[index].createTime}" +
+                      " ${bonusList[index].description}")
                 ],
               ),
-              trailing: Text("20"),
+              trailing: Text("${bonusList[index].value}"),
             ),
           );
         },
@@ -50,7 +51,9 @@ class _ScoreDetailState extends State<ScoreDetail> {
   }
 
   void getBonusByUserId() {
-    HttpUtil.getRequest(Api.bonusDetail + "/" + Constant.user.id.toString(), null, (code, msg, data) {
+    HttpUtil.getRequest(
+        Api.bonusDetail + "/" + Constant.user.id.toString(), null,
+        (code, msg, data) {
       for (int i = 0; i < data.length; i++) {
         BonusLog bonusLog = BonusLog.fromJson(data[i]);
         bonusList.add(bonusLog);

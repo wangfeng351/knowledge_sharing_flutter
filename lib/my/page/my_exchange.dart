@@ -29,7 +29,10 @@ class _MyExchangeStaet extends State<MyExchange> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("我的兑换", style: CommonStyle.title(),),
+        title: Text(
+          "我的兑换",
+          style: CommonStyle.title(),
+        ),
         backgroundColor: Constant.mColor,
       ),
       body: Container(
@@ -41,13 +44,15 @@ class _MyExchangeStaet extends State<MyExchange> {
 
   void getSharesByUserId() {
     ///get请求，路径参数为登录者id
-    HttpUtil.getRequest(Api.getExchangeShareInfo + "/" + Constant.user.id.toString(), null,
+    HttpUtil.getRequest(
+        Api.getExchangeShareInfo + "/" + Constant.user.id.toString(), null,
         (code, msg, data) {
+      print(data.length.toString());
       for (int i = 0; i < data.length; i++) {
         Share share = Share.fromJson(data[i]);
-        exchangeList.add(share); 
+        exchangeList.add(share);
         setState(() {});
-        print("share的信息是>>>>" + exchangeList[0].cover);
+        print("share的信息是>>>>" + i.toString());
       }
     }, (error) => null);
   }

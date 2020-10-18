@@ -49,6 +49,7 @@ class _CheckPageState extends State<CheckPage> {
       appBar: AppBar(
         title: Text("帖子审核"),
         centerTitle: true,
+        backgroundColor: Constant.mColor,
       ),
       body: EasyRefresh(
         header: MaterialHeader(),

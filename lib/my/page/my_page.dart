@@ -177,14 +177,17 @@ class _MyPageState extends State<MyPage> {
   }
 
   void signIn() {
-    HttpUtil.request(Api.signIn + '/' + Constant.user.id.toString(), null,
-        (code, msg, data) {
-      if (code == 0) {
-        Toast.show("签到成功", context, duration: 1, gravity: Toast.CENTER);
-        Constant.isSignIn = true;
-        Constant.user.bonus += 50;
-        setState(() {});
-      }
-    }, (error) => null);
+    print("是否签到" + Constant.isSignIn.toString());
+    if (!Constant.isSignIn) {
+      HttpUtil.request(Api.signIn + '/' + Constant.user.id.toString(), null,
+          (code, msg, data) {
+        if (code == 0) {
+          Toast.show("签到成功", context, duration: 1, gravity: Toast.CENTER);
+          Constant.isSignIn = true;
+          Constant.user.bonus += 50;
+          setState(() {});
+        }
+      }, (error) => null);
+    }
   }
 }

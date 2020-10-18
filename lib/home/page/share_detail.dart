@@ -170,6 +170,12 @@ class _ShareDetailState extends State<ShareDetail> {
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
+                //关闭对话框并返回true
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return DownloadPage(title, url);
+                  },
+                ));
               }, // 关闭对话框
             ),
             FlatButton(
@@ -177,12 +183,7 @@ class _ShareDetailState extends State<ShareDetail> {
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
-                //关闭对话框并返回true
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return DownloadPage(title, url);
-                  },
-                ));
+                
               },
             ),
           ],

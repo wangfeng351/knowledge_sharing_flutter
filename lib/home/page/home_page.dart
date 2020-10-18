@@ -230,9 +230,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ///引入自定义组件,传入对应的值
                 child: EasyRefresh(
                   header: MaterialHeader(),
-                  footer: MaterialFooter(), 
+                  footer: MaterialFooter(),
                   onRefresh: () async {
-                    pageIndex = 0;
+                    pageIndex = 1;
                     _getData();
                   },
                   onLoad: () async {
@@ -350,12 +350,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         Api.getShareInfo, {"pageSize": pageSize, "pageIndex": pageIndex},
         (code, msg, data) {
       if (code == 0) {
-        for (int i = 0; i < data.length; i++) {
-          Share share = Share.fromJson(data[i]);
-          shareLists.add(share);
+        if (pageIndex > 1) {
+          for (int i = 0; i < data.length; i++) {
+            Share share = Share.fromJson(data[i]);
+            shareLists.add(share);
+          }
+          arrLen = shareLists.length;
+          setState(() {});
+        } else {
+          shareLists = List();
+          for (int i = 0; i < data.length; i++) {
+            Share share = Share.fromJson(data[i]);
+            shareLists.add(share);
+          }
+          arrLen = shareLists.length;
+          setState(() {});
         }
-        arrLen = shareLists.length;
-        setState(() {});
       } else {
         print("请求异常>>>>>" + msg);
       }

@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
         SpUtil.putBool('isLogin', data['signIn']);
         SpUtil.putObject("token", data['token']['token']);
         Constant.token = data['token']['token'];
-        Constant.isSignIn = data['isSignIn'];
+        Constant.isSignIn = data['signIn'];
         Constant.user = user;
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
